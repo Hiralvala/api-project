@@ -20,5 +20,5 @@ const contactSchema = new mongoose.Schema({
 })
 
 // Check if the model already exists
-const Contact =  mongoose.model.Contact || mongoose.model('Contact', contactSchema);
+const Contact =  mongoose.models.Contact || mongoose.model('Contact', contactSchema);
 export default Contact;

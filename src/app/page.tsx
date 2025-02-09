@@ -6,15 +6,38 @@ export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handlesubmit = (event: any) => {
-    event.preventdefault();
+  const handlesubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsLoading(true);
 
-    setName("");
-    setEmail("");
-    setPhoneNumber("");
+    try {
+      const response = await fetch('/api/contact',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({name,email,phoneNumber})
+      })
 
-    alert('Form submitted successfully!');
+      const data=await response.json();
+      if(response.ok){
+        console.log("Form submitted successfully",data.message);
+        setName("");
+        setEmail("");
+        setPhoneNumber("");
+        alert('Form submitted successfully!');
+      }else{
+        console.log("Form submission failed: ",response.status, data.message)
+        alert(`Form submission failed: ${data.message}`)
+      }
+    }catch(error){
+      console.log("Error submitting form:", error);
+      alert('An error occurred while submitting the form.');
+    }finally {
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -54,14 +77,14 @@ export default function Home() {
               name="phoneNumber"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               placeholder="123-456-7890"
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
             />
           
 
-          <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Submit</button>
+          <button type="submit" disabled={isLoading} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"> {isLoading ? 'Submitting...' : 'Submit'}</button>
         </form>
     </>
   );
