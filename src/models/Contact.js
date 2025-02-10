@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const contactSchema = new mongoose.Schema({
+const CustomContactSchema = new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -8,6 +8,7 @@ const contactSchema = new mongoose.Schema({
     email:{
         type:String,
         required:true,
+        unique:true,
     },
     phoneNumber:{
         type:String,
@@ -20,5 +21,5 @@ const contactSchema = new mongoose.Schema({
 })
 
 // Check if the model already exists
-const Contact =  mongoose.models.Contact || mongoose.model('Contact', contactSchema);
-export default Contact;
+const CustomContact =  mongoose.models.CustomContact || mongoose.model('CustomContact', CustomContactSchema,'customContacts');
+export default CustomContact;

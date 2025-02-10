@@ -1,4 +1,5 @@
 "use client"
+import ContactList from "@/components/contactList";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -18,7 +19,7 @@ export default function Home() {
         headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify({name,email,phoneNumber,dbName: 'user_data' })
+        body:JSON.stringify({name,email,phoneNumber})
       })
 
       const data=await response.json();
@@ -86,6 +87,12 @@ export default function Home() {
 
           <button type="submit" disabled={isLoading} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"> {isLoading ? 'Submitting...' : 'Submit'}</button>
         </form>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <ContactList/>
     </>
   );
 }
