@@ -18,7 +18,7 @@ export default function Home() {
         headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify({name,email,phoneNumber})
+        body:JSON.stringify({name,email,phoneNumber,dbName: 'user_data' })
       })
 
       const data=await response.json();

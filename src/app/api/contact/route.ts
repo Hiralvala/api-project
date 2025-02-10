@@ -8,10 +8,16 @@ import { NextRequest, NextResponse } from 'next/server';
 
 
 export async function POST(request:NextRequest){
-    await connectDB();
+    const dbName = 'userData';
     try{
         const data= await request.json();
-        const{name, email, phoneNumber} = data;
+        const{name, email, phoneNumber, dbName} = data;
+
+        if (!dbName) {
+          return NextResponse.json({ message: 'Database name (dbName) is required in the request body' }, { status: 400 });
+      }
+
+      await connectDB(dbName);
 
         
     if (!name || !email || !phoneNumber) {
@@ -27,7 +33,7 @@ export async function POST(request:NextRequest){
         await newContact.save();
 
         return NextResponse.json(
-            { message: 'Contact created successfully' },
+            { message: 'Contact created successfully' , database:dbName},
             { status: 201 }
           );
     }catch(err:any){

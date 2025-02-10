@@ -2,34 +2,23 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
+// const DB_NAME = process.env.DB_NAME || 'userData';
 
 if (!MONGODB_URI) {
   throw new Error('Please define MONGODB_URI environment variable');
 }
 
 
-let cached = (global as any).mongoose;
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
-}
-
-export async function connectDB() {
-  if (cached.conn) {
-    console.log('Using existing MongoDB connection');
-    return cached.conn;
-  }
-
-  console.log('Creating new MongoDB connection...');
+export async function connectDB(dbName:string) {
 
   try {
-    cached.promise = mongoose.connect(MONGODB_URI!, {
-      bufferCommands: false,
+    console.log('Connecting to MongoDB...');
+    await mongoose.connect(MONGODB_URI!, {
+      dbName: dbName, // Specify the database name
     });
 
-    cached.conn = await cached.promise;
-    console.log('Successfully connected to MongoDB!');
-    return cached.conn;
+    console.log(`Successfully connected to MongoDB database: ${dbName}`);
+    return mongoose.connection;
   } catch (error) {
     console.error('MongoDB connection error:', error);
     throw error;
