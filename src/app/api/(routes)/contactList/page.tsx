@@ -16,9 +16,10 @@ export default function ContactList() {
   useEffect(() => {
     async function fetchContacts() {
       try {
-        const response = await fetch('/api/contact');
+        const response = await fetch('/api/get-contact');
         const data = await response.json();
         setContacts(data);
+        console.log(contacts,"contact")
       } catch (error) {
         console.error('Error fetching contacts:', error);
       } finally {
